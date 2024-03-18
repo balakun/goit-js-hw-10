@@ -10,12 +10,19 @@ function handleSubmit(event) {
   const delayInput = this.elements.delay;
   const delay = parseInt(delayInput.value);
 
-  const stateInput = this.elements.state;
-  const state = stateInput.value;
+  const stateInput = this.querySelector('input[name="state"]:checked');
+  const state = stateInput ? stateInput.value : null;
 
-  let promise;
+  if (!state) {
+    iziToast.error({
+      title: 'Error',
+      message: 'Please select a state',
+      position: 'topRight',
+    });
+    return;
+  }
 
-  promise = new Promise((resolve, reject) => {
+  let promise = new Promise((resolve, reject) => {
     setTimeout(() => {
       if (state === 'fulfilled') {
         resolve(delay);
@@ -24,6 +31,7 @@ function handleSubmit(event) {
       }
     }, delay);
   });
+
   promise
     .then(delay => {
       iziToast.success({
@@ -32,7 +40,6 @@ function handleSubmit(event) {
         position: 'topRight',
       });
     })
-
     .catch(delay => {
       iziToast.error({
         title: 'Error',

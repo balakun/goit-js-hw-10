@@ -3,6 +3,10 @@ import 'flatpickr/dist/flatpickr.min.css';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
+iziToast.settings({
+  position: 'topRight',
+});
+
 const inputDateTimePicker = document.getElementById('datetime-picker');
 const btnStart = document.querySelector('[data-start]');
 const timerFields = document.querySelectorAll('.timer .value');
@@ -27,7 +31,6 @@ function checkValidData() {
     iziToast.error({
       title: 'Error',
       message: 'Please choose a date in the future',
-      position: 'topRight',
     });
     btnStart.disabled = true;
   } else {
@@ -35,7 +38,6 @@ function checkValidData() {
     iziToast.success({
       title: 'Success',
       message: 'Correct date',
-      position: 'topRight',
     });
   }
 }
@@ -49,7 +51,6 @@ function updateTimer() {
   const msDifference = userSelectedDate - now;
   if (msDifference <= 0) {
     clearInterval(countdownInterval);
-
     timerFields.forEach(field => (field.textContent = '00'));
     return;
   }
@@ -68,24 +69,15 @@ btnStart.addEventListener('click', e => {
   countdownInterval = setInterval(updateTimer, 1000);
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-  checkValidData(); 
-});
-
 function convertMs(ms) {
-  // Number of milliseconds per unit of time
   const second = 1000;
   const minute = second * 60;
   const hour = minute * 60;
   const day = hour * 24;
 
-  // Remaining days
   const days = Math.floor(ms / day);
-  // Remaining hours
   const hours = Math.floor((ms % day) / hour);
-  // Remaining minutes
   const minutes = Math.floor(((ms % day) % hour) / minute);
-  // Remaining seconds
   const seconds = Math.floor((((ms % day) % hour) % minute) / second);
 
   return { days, hours, minutes, seconds };
